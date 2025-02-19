@@ -6,13 +6,16 @@ Smart and fast language detection for Python.
 
 ```
 lang-lens/
-├── data/                # Contains the dataset
+├── data/                # Contains the WiLI-2018 dataset and the Khan preprocessed subset
+├── experiments/         # Jupyter notebooks for experiments
 ├── langlens/            # The Python package
 │   ├── baseline/        # Preprocessing, feature extraction, and classifier
 │   ├── configuration/   # App YAML config and logging config
-│   ├── data.py          # Load data into splits
+│   ├── data.py          # Load (cleaned) data into splits
 │   ├── evaluation.py    # Evaluate model (classification report, confusion matrix, PCA plot)
 │   ├── main.py          # Click CLI interface
+├── reports/             # Milestone reports
+│   ├── sources/         # Papers etc.
 ├── tests/               # Tests
 ├── pyproject.toml       # Defines dependencies and project configuration
 ```
