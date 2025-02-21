@@ -1,7 +1,7 @@
 import click
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.preprocessing import normalize
 
-from langlens.baseline.classifier import NaiveBayes
 from langlens.baseline.vectorize import vectorize_data
 from langlens.configuration.config import get_logger
 from langlens.data import load, split
@@ -47,10 +47,13 @@ def baseline(dataset_path: str, preprocess: bool, n_gram_type: str, vocab_size: 
     train_data.x, val_data.x, test_data.x = map(normalize, [train_data.x, val_data.x, test_data.x])
 
     log.info("Training classifier...")
-    model = NaiveBayes()
+    model = MultinomialNB()
     model.fit(train_data.x, train_data.y)
 
     language_set = set(train_data.y) | set(val_data.y) | set(test_data.y)
+    log.info("Training set performance:")
+    y_train_pred = model.predict(train_data.x)
+    evaluate_model(y_train_pred, train_data, train_data, language_set)
     log.info("Validation set performance:")
     y_val_pred = model.predict(val_data.x)
     evaluate_model(y_val_pred, train_data, val_data, language_set)

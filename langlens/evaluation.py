@@ -82,6 +82,7 @@ def plot_pca(x_train: np.ndarray, x_test: np.ndarray, y_test: np.ndarray, langua
         mask = (y_test_array == lang)
         plt.scatter(pca_test[mask, 0], pca_test[mask, 1], label=lang, alpha=0.7)
 
-    plt.legend(loc="upper left")
+    plt.legend(loc='upper right', bbox_to_anchor=(1.2, 1))
     plt.grid(True)
+    plt.tight_layout()
     plt.show()
