@@ -1,10 +1,11 @@
 import click
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.preprocessing import normalize
 
-from langlens.baseline.classifier import NaiveBayes
 from langlens.baseline.vectorize import vectorize_data
 from langlens.configuration.config import get_logger
-from langlens.data import load_and_split
+from langlens.data import load, split
+from langlens.data import preprocess as preprocess_data
 from langlens.evaluation import evaluate_model
 
 log = get_logger(__name__)
@@ -32,22 +33,27 @@ def baseline(dataset_path: str, preprocess: bool, n_gram_type: str, vocab_size: 
         vocab_size (int): Size of the vocabulary to use for vectorization.
     """
     log.info("Loading dataset from %s", dataset_path)
-    train_data, val_data, test_data = load_and_split(dataset_path)
-    log.info("Training dataset size: %d, Val/Test dataset size: %d", len(train_data), len(val_data))
+    data_frame = load(dataset_path)
 
     if preprocess:
         log.info("Preprocessing data...")
-        train_data.x, val_data.x, test_data.x = map(preprocess, [train_data.x, val_data.x, test_data.x])
+        data_frame = preprocess_data(data_frame)
+
+    train_data, val_data, test_data = split(data_frame)
+    log.info("Training dataset size: %d, Val/Test dataset size: %d", len(train_data), len(val_data))
 
     log.info("Vectorizing and normalizing data...")
     train_data.x, val_data.x, test_data.x = vectorize_data(train_data, val_data, test_data, n_gram_type, vocab_size)
     train_data.x, val_data.x, test_data.x = map(normalize, [train_data.x, val_data.x, test_data.x])
 
     log.info("Training classifier...")
-    model = NaiveBayes()
+    model = MultinomialNB()
     model.fit(train_data.x, train_data.y)
 
     language_set = set(train_data.y) | set(val_data.y) | set(test_data.y)
+    log.info("Training set performance:")
+    y_train_pred = model.predict(train_data.x)
+    evaluate_model(y_train_pred, train_data, train_data, language_set)
     log.info("Validation set performance:")
     y_val_pred = model.predict(val_data.x)
     evaluate_model(y_val_pred, train_data, val_data, language_set)

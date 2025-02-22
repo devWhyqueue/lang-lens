@@ -26,8 +26,10 @@ def vectorize_data(train_data: Dataset, val_data: Dataset, test_data: Dataset, n
     unigram_vectorizer.fit(train_data.x)
     train_features, val_features, test_features \
         = map(unigram_vectorizer.transform, [train_data.x, val_data.x, test_data.x])
-    coverage = unigram_vectorizer.compute_coverage(train_data.x)
-    log.info("The vocabulary covers %.2f%% of the training data.", coverage * 100)
+    coverages = map(unigram_vectorizer.compute_coverage, [train_data.x, val_data.x, test_data.x])
+    log.info(
+        "The vocabulary covers %.2f%% of the training data, %.2f%% of the validation data, and %.2f%% of the test data.",
+        *map(lambda x: x * 100, coverages))
 
     return train_features, val_features, test_features
 
