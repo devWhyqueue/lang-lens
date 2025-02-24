@@ -52,6 +52,7 @@ class NGramVectorizer:
         :param x_train: The training data as a NumPy array.
         """
         self.vectorizer.fit(x_train.tolist())
+        log.info("The vocabulary size is %d.", len(self.vectorizer.get_feature_names_out()))
 
     def transform(self, x_data: np.ndarray) -> np.ndarray:
         """

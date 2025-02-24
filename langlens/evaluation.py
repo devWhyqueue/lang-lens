@@ -11,7 +11,32 @@ from langlens.data import Dataset
 log = get_logger(__name__)
 
 
-def evaluate_model(y_pred: np.ndarray, train_data: Dataset, test_data: Dataset, language_set: set) -> None:
+def evaluate_model_performance(model: object, train_data: Dataset, val_data: Dataset, test_data: Dataset) -> None:
+    """
+    Evaluates the model performance on training, validation, and test datasets.
+
+    Args:
+        model (object): The trained model.
+        train_data (Dataset): Training dataset.
+        val_data (Dataset): Validation dataset.
+        test_data (Dataset): Test dataset.
+    """
+    language_set = set(train_data.y) | set(val_data.y) | set(test_data.y)
+
+    log.info("Training set performance:")
+    y_train_pred = model.predict(train_data.x)
+    _evaluate(y_train_pred, train_data, train_data, language_set)
+
+    log.info("Validation set performance:")
+    y_val_pred = model.predict(val_data.x)
+    _evaluate(y_val_pred, train_data, val_data, language_set)
+
+    log.info("Test set performance:")
+    y_test_pred = model.predict(test_data.x)
+    _evaluate(y_test_pred, train_data, test_data, language_set)
+
+
+def _evaluate(y_pred: np.ndarray, train_data: Dataset, test_data: Dataset, language_set: set) -> None:
     """
     Evaluates the model by logging the classification report, plotting the confusion matrix,
     and plotting the PCA projection of the test data.
