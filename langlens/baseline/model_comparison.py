@@ -1,5 +1,7 @@
 import os
+import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.decomposition import PCA
 from sklearn.naive_bayes import MultinomialNB
@@ -39,10 +41,10 @@ def run_experiment(model, model_name, train_data, val_data, test_data, ngram, vo
     :param ngram: The n-gram type to use (e.g., "word" or "char").
     :param vocab: The maximum number of features (vocabulary size) to extract.
     """
-    # Vectorize data using the specified n-gram type and vocabulary size
+    # Vectorize data
     X_train, _, X_test = vectorize_data(train_data, val_data, test_data, ngram, vocab)
 
-    # Train the model and predict
+    # Train and predict
     model.fit(X_train, train_data.y)
     y_pred = model.predict(X_test)
 
@@ -55,15 +57,24 @@ def run_experiment(model, model_name, train_data, val_data, test_data, ngram, vo
     # PCA visualization of decision boundaries
     pca = PCA(n_components=2)
     X_test_pca = pca.fit_transform(X_test)
-    plt.figure(figsize=(8, 6))
-    unique_labels = list(set(test_data.y))
+
+    unique_labels = sorted(set(test_data.y))
     label_to_int = {label: idx for idx, label in enumerate(unique_labels)}
-    colors = [label_to_int[label] for label in test_data.y]
-    scatter = plt.scatter(X_test_pca[:, 0], X_test_pca[:, 1], c=colors, cmap='viridis', alpha=0.7)
+    colors = np.array([label_to_int[label] for label in test_data.y])
+
+    cmap = plt.get_cmap('viridis', len(unique_labels))
+
+    plt.figure(figsize=(8, 6))
+    scatter = plt.scatter(X_test_pca[:, 0], X_test_pca[:, 1], c=colors, cmap=cmap, alpha=0.7)
     plt.title(f"PCA: {model_name} ({ngram}, Vocab: {vocab})")
     plt.xlabel("PCA Component 1")
     plt.ylabel("PCA Component 2")
-    plt.colorbar(scatter, ticks=range(len(unique_labels)), label='Language Labels')
+
+    # Define colorbar with language labels
+    cbar = plt.colorbar(scatter, ticks=np.arange(len(unique_labels)))
+    cbar.set_label('Language Labels')
+    cbar.set_ticklabels(unique_labels)
+
     plt.show(block=False)
     plt.pause(2)
     plt.close('all')
@@ -161,10 +172,10 @@ def run_logistic_regression(ngram_types=None):
 
 if __name__ == '__main__':
     # To test only Naive Bayes:
-    #run_naive_bayes()
+    run_naive_bayes()
 
     # To test only SVM:
     #run_svm()
 
     # To test only Logistic Regression:
-    run_logistic_regression()
+    #run_logistic_regression()
