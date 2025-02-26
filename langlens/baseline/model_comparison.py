@@ -93,8 +93,8 @@ def run_naive_bayes(ngram_types=None):
     """
     Run experiments for the Naive Bayes classifier over various n-gram types and vocabulary sizes.
 
-    For word n-grams, test with vocab sizes [250, 500, 1000, 6838].
-    For char n-grams, test with vocab sizes [250, 500, 1000, 64000].
+    For word n-grams, test with vocab sizes [250, 500, 1000, 64000].
+    For char n-grams, test with vocab sizes [250, 500, 1000, 6838].
 
     :param ngram_types: A list of n-gram types to experiment with (default: ["word", "char"]).
     """
@@ -104,9 +104,9 @@ def run_naive_bayes(ngram_types=None):
     train_data, val_data, test_data = load_and_prepare_data()
     for ngram in ngram_types:
         if ngram == "word":
-            vocab_sizes = [250, 500, 1000, 6838]
-        elif ngram == "char":
             vocab_sizes = [250, 500, 1000, 64000]
+        elif ngram == "char":
+            vocab_sizes = [250, 500, 1000, 6838]
         else:
             raise ValueError(f"Unexpected ngram type: {ngram}")
 
@@ -118,8 +118,8 @@ def run_naive_bayes(ngram_types=None):
 def run_svm(ngram_types=None):
     """
     Run experiments for the SVM classifier over various n-gram types and vocabulary sizes.
-    For word n-grams, test with vocab sizes [250, 500, 1000, 6838].
-    For char n-grams, test with vocab sizes [250, 500, 1000, 64000].
+    For word n-grams, test with vocab sizes [250, 500, 1000, 64000].
+    For char n-grams, test with vocab sizes [250, 500, 1000, 6838].
 
     :param ngram_types: A list of n-gram types to experiment with (default: ["word", "char"]).
     """
@@ -131,9 +131,9 @@ def run_svm(ngram_types=None):
     for ngram in ngram_types:
         # Select vocabulary sizes based on the ngram type
         if ngram == "word":
-            vocab_sizes = [250, 500, 1000, 6838]
-        elif ngram == "char":
             vocab_sizes = [250, 500, 1000, 64000]
+        elif ngram == "char":
+            vocab_sizes = [250, 500, 1000, 6838]
         else:
             raise ValueError(f"Unexpected ngram type: {ngram}")
 
@@ -145,8 +145,8 @@ def run_svm(ngram_types=None):
 def run_logistic_regression(ngram_types=None):
     """
     Run experiments for the Logistic Regression classifier over various n-gram types and vocabulary sizes.
-    For word n-grams, test with vocab sizes [250, 500, 1000, 6838].
-    For char n-grams, test with vocab sizes [250, 500, 1000, 64000].
+    For word n-grams, test with vocab sizes [250, 500, 1000, 64000].
+    For char n-grams, test with vocab sizes [250, 500, 1000, 6838].
 
     :param ngram_types: A list of n-gram types to experiment with (default: ["word", "char"]).
     """
@@ -157,9 +157,9 @@ def run_logistic_regression(ngram_types=None):
 
     for ngram in ngram_types:
         if ngram == "word":
-            vocab_sizes = [250, 500, 1000, 6838]
-        elif ngram == "char":
             vocab_sizes = [250, 500, 1000, 64000]
+        elif ngram == "char":
+            vocab_sizes = [250, 500, 1000, 6838]
         else:
             raise ValueError(f"Unexpected ngram type: {ngram}")
 
@@ -171,10 +171,10 @@ def run_logistic_regression(ngram_types=None):
 
 if __name__ == '__main__':
     # To test only Naive Bayes:
-    run_naive_bayes()
+    #run_naive_bayes()
 
     # To test only SVM:
     #run_svm()
 
     # To test only Logistic Regression:
-    #run_logistic_regression()
+    run_logistic_regression()
