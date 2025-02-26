@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.decomposition import PCA
 from sklearn.naive_bayes import MultinomialNB
