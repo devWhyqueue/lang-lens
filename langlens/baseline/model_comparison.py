@@ -40,7 +40,7 @@ def run_experiment(model, model_name, train_data, val_data, test_data, ngram, vo
     :param vocab: The maximum number of features (vocabulary size) to extract.
     """
     # Vectorize data using the specified n-gram type and vocabulary size
-    X_train, X_val, X_test = vectorize_data(train_data, val_data, test_data, ngram, vocab)
+    X_train, _, X_test = vectorize_data(train_data, val_data, test_data, ngram, vocab)
 
     # Train the model and predict
     model.fit(X_train, train_data.y)
@@ -79,54 +79,92 @@ def run_experiment(model, model_name, train_data, val_data, test_data, ngram, vo
         print(f"Text: {text}\nTrue: {true_label} | Predicted: {pred_label}\n")
 
 
-def run_naive_bayes(ngram_types=["word", "char"], vocab_sizes=[256, 512, 1024]):
+def run_naive_bayes(ngram_types=None):
     """
     Run experiments for the Naive Bayes classifier over various n-gram types and vocabulary sizes.
 
+    For word n-grams, test with vocab sizes [250, 500, 1000, 6838].
+    For char n-grams, test with vocab sizes [250, 500, 1000, 64000].
+
     :param ngram_types: A list of n-gram types to experiment with (default: ["word", "char"]).
-    :param vocab_sizes: A list of vocabulary sizes (int) to experiment with (default: [256, 512, 1024]).
     """
+    if ngram_types is None:
+        ngram_types = ["word", "char"]
+
     train_data, val_data, test_data = load_and_prepare_data()
     for ngram in ngram_types:
+        if ngram == "word":
+            vocab_sizes = [250, 500, 1000, 6838]
+        elif ngram == "char":
+            vocab_sizes = [250, 500, 1000, 64000]
+        else:
+            raise ValueError(f"Unexpected ngram type: {ngram}")
+
         for vocab in vocab_sizes:
             model = MultinomialNB()
             run_experiment(model, "Naive Bayes", train_data, val_data, test_data, ngram, vocab)
 
 
-def run_svm(ngram_types=["word", "char"], vocab_sizes=[256, 512, 1024]):
+def run_svm(ngram_types=None):
     """
     Run experiments for the SVM classifier over various n-gram types and vocabulary sizes.
+    For word n-grams, test with vocab sizes [250, 500, 1000, 6838].
+    For char n-grams, test with vocab sizes [250, 500, 1000, 64000].
 
     :param ngram_types: A list of n-gram types to experiment with (default: ["word", "char"]).
-    :param vocab_sizes: A list of vocabulary sizes (int) to experiment with (default: [256, 512, 1024]).
     """
+    if ngram_types is None:
+        ngram_types = ["word", "char"]
+
     train_data, val_data, test_data = load_and_prepare_data()
+
     for ngram in ngram_types:
+        # Select vocabulary sizes based on the ngram type
+        if ngram == "word":
+            vocab_sizes = [250, 500, 1000, 6838]
+        elif ngram == "char":
+            vocab_sizes = [250, 500, 1000, 64000]
+        else:
+            raise ValueError(f"Unexpected ngram type: {ngram}")
+
         for vocab in vocab_sizes:
             model = SVC(probability=True)
             run_experiment(model, "SVM", train_data, val_data, test_data, ngram, vocab)
 
 
-def run_logistic_regression(ngram_types=["word", "char"], vocab_sizes=[256, 512, 1024]):
+def run_logistic_regression(ngram_types=None):
     """
     Run experiments for the Logistic Regression classifier over various n-gram types and vocabulary sizes.
+    For word n-grams, test with vocab sizes [250, 500, 1000, 6838].
+    For char n-grams, test with vocab sizes [250, 500, 1000, 64000].
 
     :param ngram_types: A list of n-gram types to experiment with (default: ["word", "char"]).
-    :param vocab_sizes: A list of vocabulary sizes (int) to experiment with (default: [256, 512, 1024]).
     """
+    if ngram_types is None:
+        ngram_types = ["word", "char"]
+
     train_data, val_data, test_data = load_and_prepare_data()
+
     for ngram in ngram_types:
+        if ngram == "word":
+            vocab_sizes = [250, 500, 1000, 6838]
+        elif ngram == "char":
+            vocab_sizes = [250, 500, 1000, 64000]
+        else:
+            raise ValueError(f"Unexpected ngram type: {ngram}")
+
         for vocab in vocab_sizes:
             model = LogisticRegression(max_iter=2000)
             run_experiment(model, "Logistic Regression", train_data, val_data, test_data, ngram, vocab)
 
 
+
 if __name__ == '__main__':
     # To test only Naive Bayes:
-    run_naive_bayes()
+    #run_naive_bayes()
 
     # To test only SVM:
-    # run_svm()
+    #run_svm()
 
     # To test only Logistic Regression:
-    #run_logistic_regression()
+    run_logistic_regression()
