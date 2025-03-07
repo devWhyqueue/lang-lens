@@ -1,0 +1,12 @@
+\section{Discussion}\label{sec:discussion}
+
+In this section, we synthesize our key findings, delve into the broader implications of our results, and outline potential avenues for further improvement in LID.
+
+\paragraph{Hyperparameters for LID.}
+Our key hyperparameters were model choice, \(n\)-gram type (word vs.\ character), vocabulary size, and preprocessing. SVM performed best, likely due to its ability to handle high-dimensional sparse data. Character \(n\)-grams, especially unigrams, outperformed word-based features, capturing script and morphological patterns more effectively. Vocabulary size had an optimal range—too large, and rare tokens introduced noise. Additional preprocessing had minimal impact, as the dataset was already well-prepared, suggesting that extensive text cleaning is not always necessary for LID.
+
+\paragraph{Is LID an easy task?}
+Our findings might suggest that LID is relatively straightforward, given that simple, classical machine learning methods achieve high performance (over 0.95 F1 and accuracy in most configurations). However, this must be interpreted in the context of our dataset, which includes adequately long texts (reducing ambiguity), a balanced label distribution, and only 22 languages. As other studies have shown, language identification becomes markedly more challenging when dealing with much larger language sets or shorter text segments (e.g., social media posts). Thus, while our results demonstrate that classical ML approaches can perform well under controlled conditions, more complex scenarios demand more robust or specialized solutions. \cite{Jauhiainen2019}
+
+\paragraph{Paths to improvement.}
+Despite promising results with manual feature engineering, these methods have inherent limitations, especially as the language space expands or when dealing with highly variable and noisy data. Deep learning–based solutions, in particular transformer architectures such as XLM-RoBERTa, have shown the potential to handle more nuanced linguistic phenomena by leveraging large-scale multilingual pretraining. This allows them to capture deeper semantic and syntactic patterns without extensive hand-tuned feature extraction. \cite{AbhishekPandey2023}

@@ -1,0 +1,34 @@
+\section{Problem}\label{sec:problem}
+
+We formulate LID as a multiclass classification task: given an input text, assign it exactly one language label.
+
+\subsection{Definition}\label{subsec:definition}
+Let $L = \{l_1, l_2, \dots, l_K\}$ be a set of $K$ possible languages, and let $D$ be the input space consisting of text samples (e.g., character strings, sequences of words, or tokenized representations). Formally, each text sample $d \in D$ can be viewed as a sequence of tokens $d = (w_1, w_2, \dots, w_n)$. 
+
+A labeled training dataset is typically available:
+\[
+    \{(d_i, l_i)\}_{i=1}^N,
+\]
+where $d_i$ denotes a text sample and $l_i \in L$ is the associated ground-truth label. The goal is to learn a classifier
+\[
+    f_\theta: D \to L,
+\]
+so that for each $d$, we predict the most likely label $\hat{l} = f_\theta(d)$. Model parameters $\theta$ are learned by minimizing a loss function $\mathcal{L}$ (e.g., cross-entropy) over the training data:
+\[
+    \theta^* = \arg\min_\theta \; \frac{1}{N} \sum_{i=1}^N \mathcal{L}\bigl(f_\theta(d_i), l_i\bigr).
+\]
+In practice, many classifiers output a probability distribution over labels, allowing a decision rule such as
+\[
+    f_\theta(d) = \arg\max_{l \in L} \hat{p}(l \mid d).
+\]
+
+\subsection{Approaches}\label{subsec:approaches}
+Various approaches exist for LID:
+\begin{enumerate}
+    \item \textbf{Rule-based:} These methods rely on handcrafted linguistic rules and dictionaries. They are effective for clearly distinguishable languages but often fail for ambiguous or code-switched text.
+    \item \textbf{Statistical:} Use statistical models to learn language-specific patterns from data. These models can be based on character $n$-grams, word frequencies, or other features. One of the most popular early works on LID by Cavnar and Trenkle employs a character $n$-gram frequency method to classify languages. \cite{CavnarTrenkle1994}
+    \item \textbf{Traditional ML:} Classifiers such as naïve Bayes, SVMs, or logistic regression employ engineered features, e.g., n-grams or TF-IDF, to predict language labels. Current tools like \texttt{langdetect} or \texttt{langid} are based on these methods. \cite{Nakatani2010, LuiBaldwin2012}
+    \item \textbf{Hybrid methods:} Combine rule-based and statistical approaches to improve performance. For example, \textit{lingua} combines a statistical $n$-gram model with a rule-based engine. \cite{Lingua2025}
+    \item \textbf{Neural networks:} Neural architectures (e.g., feedforward, recurrent, or transformer-based) can learn complex multilingual representations from large-scale corpora. Examples include Facebook's \texttt{fastText} and Google's \texttt{CLD3}. The former uses word embeddings and the latter character $n$-grams which they combine with a neural network. \cite{JoulinEtAl2016, GoogleCLD3}
+\end{enumerate}
+As a classification problem, LID benefits from standard algorithmic and modeling techniques while also requiring careful handling of language-specific nuances, varying input lengths, and potential multi-label scenarios (e.g., code-switching). 

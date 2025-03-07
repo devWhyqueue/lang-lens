@@ -1,0 +1,31 @@
+\section{Hyperparameter selection}
+The performance of LID models is highly dependent on the careful selection of hyperparameters. In this project, we fix unigrams as the feature representation to maintain consistency across experiments. The key hyperparameters considered include the choice of model, where we evaluate classical machine learning approaches such as naïve Bayes, SVM, and logistic regression. Additionally, we explore different $n$-gram types, including word-level and character-level representations. Other tunable parameters include the vocabulary size, which influences the feature space, and the application of preprocessing techniques, where we compare the effect of enabling or disabling text preprocessing steps.
+
+\subsection{Models}
+Several classical machine learning models are widely used for LID due to their effectiveness in handling text classification tasks. One of the most fundamental approaches is naïve Bayes, a probabilistic classifier based on Bayes' theorem with the assumption of feature independence. Despite this strong assumption, it performs well for text classification tasks due to the nature of word distributions in language data. SVM is another popular choice, which aims to find an optimal hyperplane that separates data points in a high-dimensional space, making it effective for text-based tasks when coupled with appropriate feature representations. Lastly, logistic regression is a linear model that predicts class probabilities using the sigmoid function, making it a simple yet effective approach for language classification. We use the implementations provided by the scikit-learn library for these models, which offer efficient and scalable solutions for text classification tasks. \cite{Hand2001, Cortes1995,cox1958regression}
+
+\subsection{n-grams}
+$n$-grams are widely used as feature representations in LID due to their ability to capture sequential patterns in text data. An $n$-gram is a contiguous sequence of $n$ elements from a given text, where these elements can be either words or characters. Word-level $n$-grams consider sequences of words, capturing syntactic and contextual information within a language. This approach is useful for languages with distinct word structures but may suffer from sparsity issues when dealing with large vocabularies. In contrast, character-level $n$-grams focus on sequences of individual characters, making them robust for handling morphologically rich languages, transliterations, and short texts. Character-level models are particularly effective in distinguishing languages with similar word distributions but differing orthographic or phonetic structures. While word $n$-grams offer greater interpretability and are beneficial for high-resource languages, character $n$-grams provide a more flexible and language-agnostic approach, making them a strong choice for multilingual and low-resource language identification tasks. \cite{CavnarTrenkle1994}
+
+\subsection{Vocabulary size}
+Vocabulary size impacts both the efficiency and effectiveness of text representation. The vocabulary consists of the unique tokens—either words or subword units—used to construct features for classification. A larger vocabulary captures more linguistic nuances and rare words, improving performance on diverse texts but also increasing computational cost and sparsity issues. Conversely, a smaller vocabulary reduces memory and computational requirements but may lead to a loss of discriminative power, especially in morphologically rich languages. The trade-off between vocabulary size and model performance has been extensively studied in the context of $n$-gram language models and neural word embeddings, where subword-level approaches such as character $n$-grams and byte pair encoding (BPE) help mitigate vocabulary limitations while preserving language-specific information. Careful selection of the vocabulary size is therefore essential to balance efficiency and accuracy in LID tasks.
+
+\subsection{Preprocessing}
+In general, multiple different preprocessing steps are viable for the LID task. Jauhiainen et al. mention the following preprocessing steps in their survey: \cite{Jauhiainen2019}
+
+\begin{itemize}
+    \item \textbf{Case folding}: Convert all characters to lowercase.
+    \item \textbf{Range compression}: Groups a range of characters into a single logical set to reduce sparsity, which is especially useful for languages with large character sets like Chinese.
+    \item \textbf{Noise removal}: Remove digits, punctuation, special characters, and language-independent characters (like URLs, emails, etc.). This is mostly done using heuristics.
+\end{itemize}
+Other common NLP preprocessing steps, however, might not be suited for the task. They mostly include normalization techniques:
+
+\begin{itemize}
+    \item \textbf{Removing stop words and diacritics}: As Truică et al. point out, stop words and diacritics are language-specific and useful for the LID task. \cite{Truic2018}
+    \item \textbf{Lemmatization}: Relies on understanding a word's base form, which depends on grammar, morphology, and irregular forms.
+    \item \textbf{Stemming}: Applies heuristic rules to chop off word endings, but these rules are language-dependent.
+\end{itemize}
+Language-agnostic approaches to these normalization techniques often rely on rule-based heuristics and are often impractical for numerous languages. Apart from these methods, one might use statistical, embedding-based or neural methods to learn word structures across languages. However, this would leave the realm of preprocessing for classical ML methods and enter the domain of deep learning.
+
+As previously mentioned in \cref{subsec:wili2018}, Khan's WiLi-2018 dataset was already preprocessed. The text is already lowercased and some noise removal has been applied. As the dataset's name suggests, it is already optimized for the LID task. Therefore, we expect no significant performance improvements from further preprocessing. Nevertheless, we implement a preprocessing function introducing some further noise removal listed in \cref{lst:preprocessing} to validate that assumption.
+

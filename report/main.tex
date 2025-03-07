@@ -1,0 +1,40 @@
+\documentclass[10pt,a4paper,oneside]{article}
+
+\input{config.tex}
+
+% Document metadata
+\title{Classical ML for language identification}
+\author{Yannik Queisler, Olivia Martin}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\input{abstract.tex}
+
+% Table of contents
+\thispagestyle{empty}
+\setcounter{tocdepth}{2}
+\tableofcontents
+\newpage
+\setcounter{page}{1}
+
+% Sections
+\input{intro.tex}
+\input{problem.tex}
+\input{datasets.tex}
+\input{hyperparameter.tex}
+\input{results.tex}
+\input{discussion.tex}
+
+% Appendix
+\clearpage
+\input{appendix.tex}
+
+% References
+\clearpage
+\pagenumbering{gobble}
+\bibliography{references}
+
+\end{document}
+

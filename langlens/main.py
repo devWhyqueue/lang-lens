@@ -1,13 +1,13 @@
 import click
 import numpy as np
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.preprocessing import normalize
+from sklearn.svm import LinearSVC
 
-from langlens.baseline.vectorize import vectorize_data
 from langlens.configuration.config import get_logger
 from langlens.data import load, split, Dataset
 from langlens.data import preprocess as preprocess_data
 from langlens.evaluation import evaluate_model_performance
+from langlens.vectorize import vectorize_data
 
 log = get_logger(__name__)
 
@@ -18,13 +18,13 @@ def cli():
     pass
 
 
-@cli.command(help="Run the baseline model on the provided dataset.")
+@cli.command(help="Run the model on the provided dataset.")
 @click.option('--dataset-path', required=True, type=click.Path(exists=True), help="Path to the dataset CSV file.")
 @click.option("--preprocess", is_flag=True, help="Flag to indicate whether to preprocess the text data.")
 @click.option("--val-for-training", is_flag=True, help="Flag to include the validation set for training.")
 @click.option('--n-gram-type', type=click.Choice(['word', 'char']), help="Type of n-gram to use for vectorization.")
 @click.option('--vocab-size', type=int, help="Size of the vocabulary to use for vectorization.")
-def baseline(dataset_path: str, preprocess: bool, val_for_training: bool, n_gram_type: str, vocab_size: int):
+def train(dataset_path: str, preprocess: bool, val_for_training: bool, n_gram_type: str, vocab_size: int):
     """
     Run the baseline model on the provided dataset.
 
@@ -54,7 +54,7 @@ def baseline(dataset_path: str, preprocess: bool, val_for_training: bool, n_gram
     train_data.x, val_data.x, test_data.x = map(normalize, [train_data.x, val_data.x, test_data.x])
 
     log.info("Training classifier...")
-    model = MultinomialNB()
+    model = LinearSVC()
     model.fit(train_data.x, train_data.y)
 
     evaluate_model_performance(model, train_data, val_data, test_data)

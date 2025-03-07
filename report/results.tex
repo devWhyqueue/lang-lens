@@ -1,0 +1,117 @@
+\section{Results}
+This section presents the evaluation of classical ML models' performances on Khan's WiLi-2018 subset. The evaluation is conducted using multiple standard metrics to assess its effectiveness in classifying languages. Note that this dataset poses a multiclass classification task. The results highlight the method's strengths and provide insights into areas requiring further improvement.
+
+We include the metrics accuracy and macro F1-score. These metrics are widely used in the literature, allowing us to ensure that our results are comparable with existing studies. \cite{Jauhiainen2019}
+
+\subsection{Evaluation metrics}
+The metrics are defined as follows.
+
+Accuracy measures the proportion of all classification instances that are classified correctly:
+
+\begin{equation}
+    \text{Accuracy} = \frac{\sum_{i} TP_i}{\sum_{i} (TP_i + FP_i + FN_i)},
+\end{equation}
+where $TP_i$, $FP_i$, and $FN_i$ are the true positive, false positive, and false negative instances for class $i$, respectively. 
+
+Precision indicates the proportion of correctly classified instances among all instances classified as class $i$:
+
+\begin{equation}
+    P_i = \frac{TP_i}{TP_i + FP_i}
+\end{equation}
+Recall measures the amount of correctly positive classified instances proportionate to the true amount of positive classifications:
+
+\begin{equation}
+    R_i = \frac{TP_i}{TP_i + FN_i}
+\end{equation}
+The F1-score represents the harmonic mean of precision and recall:
+
+\begin{equation}
+    F1_i = \frac{2 \cdot P_i \cdot R_i}{P_i + R_i}
+\end{equation}
+The macro-averaged F1 treats all classes equally, offering insights into how well the model performs across all language classes, regardless of class imbalance.
+
+\begin{equation} 
+    \text{Macro F1} = \frac{1}{N} \sum_{i=1}^{N} F1_i
+\end{equation}
+In addition to the standard classification metrics, we also include the vocabulary coverage. This metric measures the proportion of tokens in a dataset that are covered by the vocabulary. A coverage of 100\% means that all tokens are included in the vocabulary. We will use the coverage as a measure of how well the vocabulary represents the data. Formally, the token-level coverage can be defined as follows:
+
+\begin{equation}
+    \text{Coverage} = \frac{\sum_{i=1}^{N} \mathbf{1} (t_i \in V)}{N},
+\end{equation}
+where $N$ is the number of tokens in the data, $t_i$ is the $i$-th token, and $V$ is the vocabulary.
+ 
+\subsection{Findings}
+\Cref{tab:performance} shows the performances different hyperparameter configurations for classical ML methods. They reveal important insights into the performance of the classifiers and the challenges inherent in the task. As we are performing hyperparameter selection, we evaluate on a separate validation set (10\%). Chosen model's final performance is reported on the test set (10\%). 
+We summarize our main findings in this section.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Model performance on validation set across different configurations}
+    \label{tab:performance}
+    \begin{tabular}{llccrrrr}
+        \toprule
+        Model & N-gram & Vocab Size & Preproc. & Coverage & Accuracy & Macro F1 \\
+        \midrule
+        \multirow{8}{*}{Naive Bayes} 
+        & \multirow{4}{*}{char} & 100 & No/Yes & 82\% / 85\% & 86\% / 86\% & 84\% / 84\%  \\
+        & & 500 & No/Yes & 96\% / 96\% & 96\% / 97\% & 97\% / 97\%\\ 
+        & & 1,000 & No/Yes & 98\% / 98\% & 96\% / 96\% & 96\% / 96\% \\
+        & & 6,838 (max) & No/Yes & 100\% / 100\% & 94\% / 93\% & 94\% / 93\% \\
+        \cmidrule{2-7}
+        & \multirow{4}{*}{word} & 250 & No/Yes & 19\% / 21\% & 82\% / 77\% & 82\% / 77\% \\
+        & & 1,000 & No/Yes & 27\% / 30\% & 90\% / 86\% & 89\% / 84\% \\
+        & & 8,000 & No/Yes & 43\% / 48\% & 92\% / 87\% & 92\% / 86\%\\
+        & & 64,000 & No/Yes & 61\% / 68\% & 94\% / 87\% & 94\% / 87\% \\
+        \midrule
+        \multirow{8}{*}{SVM}
+        & \multirow{4}{*}{char} & 100 & No/Yes & 82\% / 85\% & 91\% / 91\% & 91\% / 90\% \\
+        & & \textbf{500} & \textbf{No/Yes} & \textbf{96\% / 96\%} & \textbf{97\% / 97\%} & \textbf{97\% / 97\%} \\ 
+        & & 1,000 & No/Yes & 98\% / 98\% & 97\% / 96\% & 97\% / 96\% \\
+        & & 6,838 (max) & No/Yes & 100\% / 100\% & 97\% / 96\% & 97\% / 96\% \\
+        \cmidrule{2-7}
+        & \multirow{4}{*}{word} & 250 & No/Yes & 19\% / 21\% & 87\% / 82\% & 87\% / 82\% \\
+        & & 1,000 & No/Yes & 27\% / 30\% & 94\% / 94\% & 94\% / 94\% \\
+        & & 8,000 & No/Yes & 43\% / 48\% & 95\% / 90\% & 95\% / 89\% \\
+        & & \textbf{64,000} & \textbf{No}/Yes & \textbf{61\%} / 68\% & \textbf{96\%} / 93\% & \textbf{96\%} / 92\% \\
+        \midrule
+        \multirow{8}{*}{Log. Reg.}
+        & \multirow{4}{*}{char} & 100 & No/Yes & 82\% / 85\% & 90\% / 90\% & 89\% / 89\% \\
+        & & 500 & No/Yes & 96\% / 96\% & 96\% / 95\% & 96\% / 95\% \\ 
+        & & 1,000 & No/Yes & 98\% / 98\% & 96\% / 95\% & 96\% / 95\% \\
+        & & 6,838 (max) & No/Yes & 100\% / 100\% & 96\% / 95\% & 96\% / 95\% \\
+        \cmidrule{2-7}
+        & \multirow{4}{*}{word} & 250 & No/Yes & 19\% / 21\% & 86\% / 82\% & 86\% / 82\%  \\
+        & & 1,000 & No/Yes & 27\% / 30\% & 93\% / 89\% & 93\% / 89\% \\
+        & & 8,000 & No/Yes & 43\% / 49\% & 94\% / 91\% & 94\% / 90\% \\
+        & & 64,000 & No/Yes & 61\% / 68\% & 95\% / 91\% & 96\% / 91\%\\
+        \bottomrule
+        \end{tabular}
+\end{table}
+
+\paragraph{SVM performs best.}
+All classical ML models perform well, with the best configurations of each model achieving accuracy/F1-scores above 0.95. Among them, SVM achieves the highest validation accuracy/F1 (0.97). When trained on both the training and validation sets, SVM yields a test accuracy/F1 of 0.96.\footnote{For comparability, we also trained this SVM configuration with an 80/20 train/test split. This yielded a test performance of accuracy/F1 of 0.97.} A possible explanation for the strong performance of even simple models is that the dataset is balanced, the texts have reasonable length, and the language subset is relatively small (22 languages). This finding aligns with comparable work like in the study of Bhansali et al.. \cite{Bhansali2022}
+
+\paragraph{Character unigrams outperform word unigrams.}
+Character unigrams outperform word unigrams, achieving the best validation accuracy/F1 of 0.97 compared to 0.96 for word unigrams. While this might not seem a notable difference at first, a comparison of the vocabulary sizes (500 vs. 64,000) shows the discriminative power difference of the two $n$-gram types. This difference is also evident in our PCA analysis (see \cref{fig:pca_svm_word_unigram} vs. \cref{fig:pca_svm_char_unigram}), where the explained variance of the first two principal components is much higher for character unigrams (46.6\%) than for word unigrams (6.7\%). As a result, the plot of character-based features appears more compact and exhibits better-separated clusters, while word-level features distribute their variance across thousands of dimensions, leading to less obvious clustering in two dimensions.
+
+Character-level features often capture broad distinctions (e.g., different scripts) in fewer dimensions, making them particularly well-suited for language identification. In contrast, word-level features, though informative, are more prone to fragmentation—especially for languages with large or highly varied vocabularies—and thus require more dimensions to achieve similar separability.
+
+\paragraph{PCA clusters show distinct language groups.}
+A closer inspection of the PCA clusters (\cref{fig:pca_svm_char_unigram}) reveals three notable groupings:
+
+\begin{enumerate}
+  \item \textbf{European languages:} A cluster in the upper-right portion of the plot includes languages such as English, Spanish, Dutch, and Estonian. All of these use the Latin script and share many characters. In a two-dimensional PCA plot, they often overlap, indicating that additional dimensions are needed for finer separation.
+
+  \item \textbf{Indo-Iranian and Semitic languages:} A cluster in the upper-left portion contains languages such as Arabic, Persian, Hindi, and Urdu, which share common script features (Arabic and its variants).
+
+  \item \textbf{Asian languages:} A vertically stretched cluster in the middle consists of languages such as Chinese, Japanese, and Russian. These use distinct scripts with minimal character overlap (e.g., hanzi, kanji, Cyrillic), leading to a more dispersed distribution in the 2D plot.
+\end{enumerate}
+
+\paragraph{Coverage increases with vocabulary size.}
+As vocabulary size increases, token coverage also increases. However, model performance does not consistently improve beyond a certain point. In fact, for character unigrams at the maximum vocabulary size, both accuracy and F1 decrease for naive Bayes. We hypothesize that introducing too many rare character sequences leads to overfitting, adding noise rather than improving discriminative power.
+
+\paragraph{Further preprocessing has no further positive impact.}
+We also experimented with more extensive noise removal. While this significantly increases coverage (especially for word unigrams), performance is either hardly affected for character unigrams or presents a notable decrease for word unigrams (96\% vs. 92\%). A plausible explanation is that the dataset is already well-prepared for language identification. In general, this task benefits from minimal rather than extensive preprocessing, particularly when working with relatively clean datasets. While preprocessing can be crucial in some cases, for this dataset, further cleaning does not yield performance gains. Note that hand-crafted rules taylored to this specific dataset might still improve performance but usually do not generalize well to other datasets and therefore do not improve the overall model.
+
+\paragraph{Room for improvement with specific languages.}
+Although the best model performs well overall, certain languages remain challenging. English, in particular, exhibits a high recall (0.95) but a comparatively low precision (0.81). From the confusion matrix (\cref{fig:matrix_svm_char_unigram}), we observe that instances of French, Estonian, Latin, and Spanish are misclassified as English. This is likely due to substantial character overlap between English and these languages, especially those in the Romance (French, Latin, Spanish) family. \cite{AbhishekPandey2023}

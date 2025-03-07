@@ -1,0 +1,9 @@
+\section{Introduction}\label{sec:intro}
+
+LID is the problem of determining the natural language that a given text, or part of it, is written in. It is a fundamental task in NLP that enables technologies such as multilingual search, speech recognition, and content filtering. As global content becomes increasingly diverse, the need for accurate and efficient LID systems grows. \cite{Jauhiainen2019}
+
+Even though language identification has been extensively studied, it continues to pose challenges. For example, short texts (e.g., social media posts) may contain too little information for reliable classification. Code-switching, where multiple languages appear within a single sentence, can confuse models built for strictly monolingual text. Closely related languages or dialects (e.g., Serbian vs.\ Croatian) can also share significant lexical and syntactic similarities, making them difficult to distinguish. \cite{Vatanen2010}
+
+In this project, however, our objective is not to develop a state-of-the-art LID system. Instead, we focus on evaluating and analyzing classical machine learning methods under realistic conditions, including noisy, multi-domain, and mixed-language data.
+
+Specifically, we employ straightforward, interpretable techniques, such as character- or word-based $n$-gram models, and examine how different hyperparameters  (preprocessing, vocabulary size) affect their performance. Beyond raw accuracy and F1-score, we aim to understand how these configurations influence vocabulary coverage, error patterns, and overall model behavior -- thus providing deeper insights into the strengths and limitations of classical LID methods.
